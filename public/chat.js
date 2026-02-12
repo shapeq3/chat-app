@@ -3,12 +3,44 @@ const socket = io();
 const messageInput = document.getElementById('messageInput');
 const sendBtn = document.getElementById('sendBtn');
 const messagesDiv = document.getElementById('messages');
+const emojiBtn = document.getElementById('emojiBtn');
+const emojiPicker = document.getElementById('emojiPicker');
+const closeEmojiPicker = document.getElementById('closeEmojiPicker');
+const emojiItems = document.querySelectorAll('.emoji-item');
+
 let currentUsername = localStorage.getItem('username') || 'Guest';
 
 // Display current username
 if (document.getElementById('currentUsername')) {
   document.getElementById('currentUsername').textContent = currentUsername;
 }
+
+// Toggle emoji picker
+emojiBtn.addEventListener('click', () => {
+  emojiPicker.classList.toggle('hidden');
+});
+
+// Close emoji picker
+closeEmojiPicker.addEventListener('click', () => {
+  emojiPicker.classList.add('hidden');
+});
+
+// Add emoji to input
+emojiItems.forEach(item => {
+  item.addEventListener('click', (e) => {
+    const emoji = e.target.textContent;
+    messageInput.value += emoji;
+    messageInput.focus();
+    emojiPicker.classList.add('hidden');
+  });
+});
+
+// Close emoji picker when clicking outside
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.emoji-picker') && !e.target.closest('.emoji-btn')) {
+    emojiPicker.classList.add('hidden');
+  }
+});
 
 // Send message on button click
 sendBtn.addEventListener('click', () => {
